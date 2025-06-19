@@ -1,20 +1,35 @@
-import { IsUrl } from 'class-validator';
+import { 
+  ArrayNotEmpty, 
+  IsArray, 
+  IsNotEmpty, 
+  IsNumber, 
+  IsString, 
+  IsUrl, 
+  Length, 
+  Min 
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateCoffeeDto {
-  // não pode ser vazio
+  @IsString()
+  @IsNotEmpty()
+  @Length(3, 50)
   name: string;
 
-  // mínimo de 10 e máximo de 200 caracteres
+  @IsString()
+  @Length(10, 200)
   description: string;
 
-  // número positivo com até 2 casas decimais
   @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0.01)
   price: number;
 
   @IsUrl()
   imageUrl: string;
 
-  // deve ser uma URL válida
-  tagIds: string[];
-} 
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  tags: string[];
+}
